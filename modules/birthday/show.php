@@ -10,6 +10,7 @@ if ($auth['type'] >= \LS_AUTH_TYPE_ADMIN or !$cfg['sys_internet'] or $cfg['guest
 	$ms2->query['where'] = '1 = 1';
 } else {
 	$ms2->query['where'] = 'party_id = ' . intval($party->party_id);
+	$ms2->query['where'] .= ' AND u.show_birthday = 1';
 }
 
 $ms2->query['default_order_by'] = 'birthday DESC';
@@ -27,8 +28,9 @@ $ms2->AddResultField(t('Benutzername'), 'u.username');
 if ($auth['type'] >= \LS_AUTH_TYPE_ADMIN or !$cfg['sys_internet'] or $cfg['guestlist_shownames']) {
 	$ms2->AddResultField(t('Vorname'), 'u.firstname');
 	$ms2->AddResultField(t('Nachname'), 'u.name');
+	$ms2->AddResultField(t('Geburtstag anzeigen'), 'IF(u.show_birthday, "ja", "nein") AS show_birthday');
 }
-$ms2->AddResultField(t('Geburtstag anzeigen'), 'IF(u.show_birthday, "ja", "nein") AS show_birthday');
+
 $ms2->AddResultField('Geburtstag', 'DATE_FORMAT(birthday, "%d.%m.%Y") as birthd');
 $ms2->AddResultField(t('Alter'), 'DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),birthday)), "%Y") + 0 AS age');
  
